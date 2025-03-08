@@ -23,6 +23,28 @@ export class AdminDashboardComponent implements OnInit {
 
   selectedOption: string = 'DB'; // Property to store the selected option
 
+  currentPage: number = 1;
+  itemsPerPage: number = 6;
+  totalItems: number = 0;
+
+  get paginatedDBMovies(): any[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.dbMovies.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get paginatedOMDBMovies(): any[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.omdbMovies.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get totalPages(): number {
+    const movies = this.selectedOption === 'DB' ? this.dbMovies : this.omdbMovies;
+    return Math.ceil(movies.length / this.itemsPerPage);
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+  }
 
   constructor(
       private movieService: MovieService,
@@ -118,7 +140,7 @@ export class AdminDashboardComponent implements OnInit {
         alert('Movie added successfully');
       },
       error => {
-        alert('Error adding movie');
+      alert('Error adding movie');
       }
     );
   }

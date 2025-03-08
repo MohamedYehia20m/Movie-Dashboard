@@ -52,16 +52,13 @@ export class MovieService {
     );
   }
 
-  addMovieByTitleAndYear(title: string, year: string) {
+  addMovieByTitleAndYear(title: string, year: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
 
-    const headers = new HttpHeaders(
-      {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + this.authService.getToken()
-      }
-    );
-
-    return this.http.post(`${this.apiUrl}/${title}/${year}`, {headers , withCredentials: true }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/${title}/${year}`, headers, {withCredentials : true}).pipe(
       catchError(this.handleError)
     );
   }

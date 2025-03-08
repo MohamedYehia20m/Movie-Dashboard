@@ -38,7 +38,7 @@
     <button (click)="clearSearch()" class="btn">Clear</button>
 
     <div class="movie-list-db" *ngIf="selectedOption === 'DB'">
-      <div *ngFor="let movie of dbMovies" class="movie-card">
+      <div *ngFor="let movie of paginatedDBMovies" class="movie-card">
         <img [src]="movie.Poster" alt="Movie poster" class="movie-poster" width="300" height="450">
         <div class="movie-info">
           <h3>{{movie.imdbID}}</h3>
@@ -52,7 +52,7 @@
     </div>
 
     <div class="movie-list-omdb" *ngIf="selectedOption === 'OMDB'">
-      <div *ngFor="let movie of omdbMovies" class="movie-card">
+      <div *ngFor="let movie of paginatedOMDBMovies" class="movie-card">
         <img [src]="movie.Poster" alt="Movie poster" class="movie-poster">
         <div class="movie-info">
           <h3>{{movie.imdbID}</h3>
@@ -64,6 +64,38 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination" *ngIf="(selectedOption === 'DB' && dbMovies.length > 0) || (selectedOption === 'OMDB' && omdbMovies.length > 0)">
+      <button
+        [disabled]="currentPage === 1"
+        (click)="onPageChange(currentPage - 1)"
+        class="btn nav-btn">
+        &laquo; Previous
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="currentPage === i + 1"
+          (click)="onPageChange(i + 1)"
+          class="btn page-btn">
+          {{i + 1}}
+        </button>
+      </div>
+
+      <button
+        [disabled]="currentPage === totalPages"
+        (click)="onPageChange(currentPage + 1)"
+        class="btn nav-btn">
+        Next &raquo;
+      </button>
+    </div>
+
+    <!-- No Results Message -->
+    <div *ngIf="(selectedOption === 'DB' && dbMovies.length === 0) || (selectedOption === 'OMDB' && omdbMovies.length === 0)" class="no-results">
+      <p>No movies found. Try loading all movies or performing a search.</p>
     </div>
   </section>
 </div>

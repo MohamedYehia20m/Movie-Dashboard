@@ -1,18 +1,65 @@
-<div class="dashboard-container">
-  <!-- Movies Section -->
-  <section class="movies-section">
-    <h2>Movies</h2>
-    <div class="movies-grid">
-      <div class="movie-card" *ngFor="let movie of movies">
-        <h3>{{ movie.Title }}</h3>
-        <p>Year: {{ movie.Year }}</p>
-        <div class="movie-actions">
-          <button (click)="loadMovies()">View All Movies</button>
-          <button (click)="viewDetailsByImdbID(movie)">View by IMDB ID</button>
-          <button (click)="viewDetailsByTitleAndYear(movie)">View by Title/Year</button>
+<div class="user-container">
+  <!-- Movie Management Section -->
+  <section class="movie-section">
+    <h2>Movie Management</h2>
+
+    <div class="get-all-movies">
+      <button (click)="loadAllMovies()" class="btn primary">Load DB Movies</button>
+    </div>
+
+    <div  class="search-db">
+      <input [(ngModel)]="searchTitle" placeholder="Movie title..." class="search-input">
+      <input [(ngModel)]="searchYear" placeholder="Year..." class="search-input year">
+      <input [(ngModel)]="searchImdbID" placeholder="IMDB ID..." class="search-input">
+
+      <button (click)="getMovieFromDB(searchImdbID)" class="btn primary">Search DB By ImdbID</button>
+      <button (click)="getMovieFromDBByTitleYear(searchTitle, searchYear)" class="btn primary">Search DB By Title, Year</button>
+    </div>
+
+    <button (click)="clearSearch()" class="btn">Clear</button>
+
+    <div class="movie-list-db" >
+      <div *ngFor="let movie of paginatedMovies" class="movie-card">
+        <img [src]="movie.Poster" alt="Movie poster" class="movie-poster" width="300" height="450">
+        <div class="movie-info">
+          <h3>{{movie.imdbID}}</h3>
+          <h3>{{movie.Title}}</h3>
+          <p>{{movie.Year}}</p>
         </div>
       </div>
     </div>
-  </section>
 
+    <!-- Pagination Controls -->
+    <div class="pagination" *ngIf="dbMovies.length > 0">
+      <button
+        [disabled]="currentPage === 1"
+        (click)="onPageChange(currentPage - 1)"
+        class="btn nav-btn">
+        &laquo; Previous
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="currentPage === i + 1"
+          (click)="onPageChange(i + 1)"
+          class="btn page-btn">
+          {{i + 1}}
+        </button>
+      </div>
+
+      <button
+        [disabled]="currentPage === totalPages"
+        (click)="onPageChange(currentPage + 1)"
+        class="btn nav-btn">
+        Next &raquo;
+      </button>
+    </div>
+
+    <!-- No Results Message -->
+    <div *ngIf="dbMovies.length === 0" class="no-results">
+      <p>No movies found. Try loading all movies or performing a search.</p>
+    </div>
+
+  </section>
 </div>
