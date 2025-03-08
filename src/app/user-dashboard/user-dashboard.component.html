@@ -1,0 +1,18 @@
+<div class="dashboard-container">
+  <!-- Movies Section -->
+  <section class="movies-section">
+    <h2>Movies</h2>
+    <div class="movies-grid">
+      <div class="movie-card" *ngFor="let movie of movies">
+        <h3>{{ movie.Title }}</h3>
+        <p>Year: {{ movie.Year }}</p>
+        <div class="movie-actions">
+          <button (click)="loadMovies()">View All Movies</button>
+          <button (click)="viewDetailsByImdbID(movie)">View by IMDB ID</button>
+          <button (click)="viewDetailsByTitleAndYear(movie)">View by Title/Year</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
