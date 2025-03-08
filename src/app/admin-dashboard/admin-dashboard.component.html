@@ -1,36 +1,11 @@
-<!-- admin-dashboard.component.html -->
 <div class="admin-container">
   <!-- Movie Management Section -->
   <section class="movie-section">
     <h2>Movie Management</h2>
 
-    <div class=" get all movies">
-        <button (click)="loadAllMovies()" class="btn primary">Load DB Movies</button>
+    <div class="get-all-movies">
+      <button (click)="loadAllMovies()" class="btn primary">Load DB Movies</button>
     </div>
-
-    <div class="search-db">
-        <input [(ngModel)]="searchTitle" placeholder="Movie title..." class="search-input">
-        <input [(ngModel)]="searchYear" placeholder="Year..." class="search-input year">
-        <input [(ngModel)]="searchImdbID" placeholder="IMDB ID..." class="search-input">
-
-        <button (click)="getMovieFromDB(searchImdbID)" class="btn primary">Search DB By ImdbID</button>
-        <button (click)="getMovieFromDBByTitleYear(searchTitle,searchYear)" class="btn primary">Search DB By Title , Year</button>
-
-        <button (click)="clearSearch()" class="btn">Clear</button>
-    </div>
-
-    <div class="search-omdb">
-        <input [(ngModel)]="searchTitle" placeholder="Movie title..." class="search-input">
-        <input [(ngModel)]="searchYear" placeholder="Year..." class="search-input year">
-        <input [(ngModel)]="searchImdbID" placeholder="IMDB ID..." class="search-input">
-
-      <button (click)="searchMoviesOMDB()" class="btn primary">Search OMDB</button>
-      <button (click)="getMovieFromOMDB(searchImdbID)" class="btn primary">Get Movie By ImdbID</button>
-      <button (click)="getMovieFromOMDBByTitleYear(searchTitle,searchYear)" class="btn primary">Get Movie By Title , Year</button>
-
-      <button (click)="clearSearch()" class="btn">Clear</button>
-    </div>
-
 
     <div class="radio-buttons">
       <label>
@@ -41,10 +16,32 @@
       </label>
     </div>
 
+    <div *ngIf="selectedOption === 'DB'" class="search-db">
+      <input [(ngModel)]="searchTitle" placeholder="Movie title..." class="search-input">
+      <input [(ngModel)]="searchYear" placeholder="Year..." class="search-input year">
+      <input [(ngModel)]="searchImdbID" placeholder="IMDB ID..." class="search-input">
+
+      <button (click)="getMovieFromDB(searchImdbID)" class="btn primary">Search DB By ImdbID</button>
+      <button (click)="getMovieFromDBByTitleYear(searchTitle, searchYear)" class="btn primary">Search DB By Title, Year</button>
+    </div>
+
+    <div *ngIf="selectedOption === 'OMDB'" class="search-omdb">
+      <input [(ngModel)]="searchTitle" placeholder="Movie title..." class="search-input">
+      <input [(ngModel)]="searchYear" placeholder="Year..." class="search-input year">
+      <input [(ngModel)]="searchImdbID" placeholder="IMDB ID..." class="search-input">
+
+      <button (click)="searchMoviesOMDB()" class="btn primary">Search By Title</button>
+      <button (click)="getMovieFromOMDB(searchImdbID)" class="btn primary">Get Movie By ImdbID</button>
+      <button (click)="getMovieFromOMDBByTitleYear(searchTitle, searchYear)" class="btn primary">Get Movie By Title, Year</button>
+    </div>
+
+    <button (click)="clearSearch()" class="btn">Clear</button>
+
     <div class="movie-list-db" *ngIf="selectedOption === 'DB'">
       <div *ngFor="let movie of dbMovies" class="movie-card">
         <img [src]="movie.Poster" alt="Movie poster" class="movie-poster" width="300" height="450">
         <div class="movie-info">
+          <h3>{{movie.imdbID}}</h3>
           <h3>{{movie.Title}}</h3>
           <p>{{movie.Year}}</p>
           <div class="action-buttons">
@@ -58,17 +55,15 @@
       <div *ngFor="let movie of omdbMovies" class="movie-card">
         <img [src]="movie.Poster" alt="Movie poster" class="movie-poster">
         <div class="movie-info">
+          <h3>{{movie.imdbID}</h3>
           <h3>{{movie.Title}}</h3>
           <p>{{movie.Year}}</p>
           <div class="action-buttons">
-            <button (click)="addMovieByImdbID(movie.imdbID)" class="btn primary">Add By ImdbID</button>
+            <button (click)="addMovieByImdbID(movie.ImdbID)" class="btn primary">Add By ImdbID</button>
             <button (click)="addMovieByTitleAndYear(movie.Title, movie.Year)" class="btn primary">Add By Title, Year</button>
           </div>
         </div>
       </div>
     </div>
   </section>
-
-
-
 </div>

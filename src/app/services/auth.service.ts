@@ -37,4 +37,8 @@ export class AuthService {
     return !!localStorage.getItem('username');
   }
 
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
 }

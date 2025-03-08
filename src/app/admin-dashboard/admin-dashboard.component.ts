@@ -14,6 +14,7 @@ import {CommonModule} from '@angular/common';
 export class AdminDashboardComponent implements OnInit {
   dbMovies: any[] = [];
   omdbMovies: any[] = [];
+  movie: any = null;
 
   searchTitle: string = '';
   searchYear: string = '';
@@ -41,10 +42,16 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  getMovieFromDB(imdbID: string) {
-    this.movieService.getMovieByImdbID(imdbID).subscribe((movie: any) => {
-      this.dbMovies = movie;
-    });
+  getMovieFromDB(imdbID: string): void {
+    this.movieService.getMovieByImdbID(imdbID).subscribe(
+      (response) => {
+        this.dbMovies = Array.isArray(response) ? response : [response]; // Ensure the response is an array
+        console.log(this.dbMovies); // Check if the response is logged
+      },
+      (error) => {
+        console.error('Error fetching movie:', error);
+      }
+    );
   }
 
   getMovieFromDBByTitleYear(title: string, year: string) {
@@ -52,8 +59,9 @@ export class AdminDashboardComponent implements OnInit {
       alert('Title and year are required');
     }
     this.movieService.getMovieByTitleAndYear(title, year).subscribe(
-      (data: any) => {
-        this.dbMovies = [data]; // Assuming the response is a single movie object
+      (response) => {
+        this.dbMovies = Array.isArray(response) ? response : [response]; // Ensure the response is an array
+        console.log(this.dbMovies); // Check if the response is logged
       },
       (error) => {
         console.error('Error fetching movie:', error);
@@ -70,15 +78,27 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   getMovieFromOMDB(imdbID: string) {
-    this.movieService.getMovieByImdbID_OMDB(imdbID).subscribe((movie: any) => {
-      this.omdbMovies = movie;
-    });
+    this.movieService.getMovieByImdbID_OMDB(imdbID).subscribe(
+      (response: any) => {
+      this.omdbMovies = Array.isArray(response) ? response : [response]; // Ensure the response is an array
+      console.log(this.omdbMovies); // Check if the response is logged
+    },
+      (error) => {
+        console.error('Error fetching movie:', error);
+      }
+    );
   }
 
   getMovieFromOMDBByTitleYear(title: string, year: string) {
-    this.movieService.getMovieByTitleAndYear_OMDB(title, year).subscribe((movie: any) => {
-      this.omdbMovies = movie;
-    });
+    this.movieService.getMovieByTitleAndYear_OMDB(title, year).subscribe(
+      (response: any) => {
+      this.omdbMovies = Array.isArray(response) ? response : [response]; // Ensure the response is an array
+        console.log(this.omdbMovies); // Check if the response is logged
+      },
+      (error) => {
+        console.error('Error fetching movie:', error);
+      }
+    );
   }
 
   addMovieByImdbID(imdbID: string) {

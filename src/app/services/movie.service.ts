@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse , HttpHeaders} from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import {Observable, throwError} from 'rxjs';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +10,14 @@ import { throwError } from 'rxjs';
 export class MovieService {
   private apiUrl = 'http://localhost:8080/api/movies';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient , private authService: AuthService) { }
 
   getAllMovies() {
     return this.http.get(this.apiUrl, { withCredentials: true });
   }
 
-  getMovieByImdbID(imdbID: string) {
-    return this.http.get(`${this.apiUrl}/db/${imdbID}`, {withCredentials: true }).pipe(
+  getMovieByImdbID(imdbID: string) : Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/db/${imdbID}`, {withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
@@ -52,7 +53,15 @@ export class MovieService {
   }
 
   addMovieByTitleAndYear(title: string, year: string) {
-    return this.http.post(`${this.apiUrl}/${title}/${year}`, { withCredentials: true }).pipe(
+
+    const headers = new HttpHeaders(
+      {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authService.getToken()
+      }
+    );
+
+    return this.http.post(`${this.apiUrl}/${title}/${year}`, {headers , withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
