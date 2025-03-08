@@ -10,6 +10,8 @@ To start a local development server, run:
 ng serve
 ```
 
+*****make sure to run the Spring Boot Backend https://github.com/MohamedYehia20m/movie*****
+
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
 ## Code scaffolding
